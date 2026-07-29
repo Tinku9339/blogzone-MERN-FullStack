@@ -1,0 +1,191 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+:root {
+  --canvas: 20 23 31;
+  --canvas-panel: 27 31 41;
+  --canvas-raised: 35 40 55;
+  --paper: 241 234 217;
+  --paper-dim: 231 222 200;
+  --paper-line: 217 205 174;
+  --ink: 33 29 24;
+  --ink-soft: 65 58 48;
+  --muted: 138 143 156;
+}
+
+html.light {
+  --canvas: 248 245 238;
+  --canvas-panel: 255 252 246;
+  --canvas-raised: 239 232 219;
+  --paper: 40 35 29;
+  --paper-dim: 67 58 47;
+  --paper-line: 184 170 145;
+  --ink: 33 29 24;
+  --ink-soft: 65 58 48;
+  --muted: 111 101 88;
+}
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-canvas text-paper font-body antialiased;
+  }
+
+  ::selection {
+    @apply bg-brass/30 text-paper;
+  }
+
+  * {
+    @apply border-paper-line/20;
+  }
+
+  :focus-visible {
+    outline: 2px solid #C99A4A;
+    outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  .eyebrow {
+    @apply font-mono text-[11px] uppercase tracking-[0.18em] text-brass;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-sm px-5 py-2.5 text-sm font-medium
+      transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-primary {
+    @apply btn bg-brass text-canvas hover:bg-brass/90;
+  }
+
+  .btn-outline {
+    @apply btn border border-paper-line/40 text-paper hover:border-brass hover:text-brass;
+  }
+
+  .btn-ghost {
+    @apply btn text-muted hover:text-paper;
+  }
+
+  .btn-danger {
+    @apply btn bg-rust text-paper hover:bg-rust/90;
+  }
+
+  .field-label {
+    @apply block font-mono text-[11px] uppercase tracking-[0.14em] text-muted mb-2;
+  }
+
+  .field-input {
+    @apply w-full rounded-sm border border-paper-line/25 bg-canvas-panel px-3.5 py-2.5 text-sm text-paper
+      placeholder:text-muted/70 focus:border-brass focus:outline-none transition-colors;
+  }
+
+  .card-paper {
+    @apply bg-paper text-ink rounded-[2px] shadow-paper;
+  }
+
+  .dog-ear {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .dog-ear::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 26px;
+    height: 26px;
+    background: rgb(var(--canvas));
+    clip-path: polygon(100% 0, 0 0, 100% 100%);
+    opacity: 0.85;
+    z-index: 1;
+  }
+
+  .dog-ear::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 26px;
+    height: 26px;
+    background: #C99A4A;
+    clip-path: polygon(100% 0, 8px 0, 100% 8px);
+    z-index: 2;
+  }
+}
+
+.ql-toolbar.ql-snow,
+.ql-container.ql-snow {
+  border-color: rgb(var(--paper-line) / 0.3);
+}
+
+.ql-toolbar.ql-snow {
+  background: rgb(var(--canvas-raised));
+}
+
+.ql-container.ql-snow {
+  background: rgb(var(--canvas-panel));
+  color: rgb(var(--paper));
+  font-family: inherit;
+  font-size: 0.875rem;
+}
+
+.ql-editor.ql-blank::before {
+  color: rgb(var(--muted) / 0.75);
+}
+
+.ql-snow .ql-stroke {
+  stroke: rgb(var(--paper));
+}
+
+.ql-snow .ql-fill {
+  fill: rgb(var(--paper));
+}
+
+.ql-snow .ql-picker {
+  color: rgb(var(--paper));
+}
+
+.ql-snow .ql-picker-options {
+  background: rgb(var(--canvas-raised));
+  border-color: rgb(var(--paper-line) / 0.3);
+}
+
+.ql-snow .ql-picker-label:hover,
+.ql-snow .ql-picker-item:hover,
+.ql-snow button:hover .ql-stroke,
+.ql-snow button.ql-active .ql-stroke {
+  color: #c99a4a;
+  stroke: #c99a4a;
+}
+
+html.light .blog-card-title {
+  color: #7c6146;
+}
+
+html.light .blog-card-description {
+  color: #b3ada5;
+}
+
+html,
+body {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
+}
