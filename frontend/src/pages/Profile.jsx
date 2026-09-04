@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import { Save, KeyRound, X } from 'lucide-react'
+import { Save, KeyRound, X, Eye, EyeOff } from 'lucide-react'
 import { useAuth } from '../context/AuthContext.jsx'
 import { updateProfile, changePassword } from '../api/profile.js'
 import { uploadImage } from '../api/misc.js'
@@ -16,6 +16,9 @@ export default function Profile() {
 
   const [passwordForm, setPasswordForm] = useState({ oldPassword: '', newPassword: '', confirmNew: '' })
   const [changingPassword, setChangingPassword] = useState(false)
+  const [showOldPassword, setShowOldPassword] = useState(false)
+  const [showNewPassword, setShowNewPassword] = useState(false)
+  const [showConfirmNew, setShowConfirmNew] = useState(false)
 
   useEffect(() => {
     if (!user) return
@@ -211,42 +214,75 @@ export default function Profile() {
         <form onSubmit={handleChangePassword} className="mt-5 flex flex-col gap-4">
           <div>
             <label className="field-label" htmlFor="oldPassword">Current password</label>
-            <input
-              id="oldPassword"
-              type="password"
-              className="field-input"
-              value={passwordForm.oldPassword}
-              onChange={(e) => setPasswordForm((f) => ({ ...f, oldPassword: e.target.value }))}
-              autoComplete="current-password"
-              required
-            />
+            <div className="relative">
+              <input
+                id="oldPassword"
+                type={showOldPassword ? 'text' : 'password'}
+                className="field-input pr-10"
+                value={passwordForm.oldPassword}
+                onChange={(e) => setPasswordForm((f) => ({ ...f, oldPassword: e.target.value }))}
+                autoComplete="current-password"
+                required
+              />
+              <button
+                type="button"
+                onClick={() => setShowOldPassword((prev) => !prev)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-paper transition-colors focus:outline-none"
+                title={showOldPassword ? 'Hide password' : 'Show password'}
+                tabIndex={-1}
+              >
+                {showOldPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </button>
+            </div>
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
               <label className="field-label" htmlFor="newPassword">New password</label>
-              <input
-                id="newPassword"
-                type="password"
-                className="field-input"
-                value={passwordForm.newPassword}
-                onChange={(e) => setPasswordForm((f) => ({ ...f, newPassword: e.target.value }))}
-                autoComplete="new-password"
-                minLength={6}
-                required
-              />
+              <div className="relative">
+                <input
+                  id="newPassword"
+                  type={showNewPassword ? 'text' : 'password'}
+                  className="field-input pr-10"
+                  value={passwordForm.newPassword}
+                  onChange={(e) => setPasswordForm((f) => ({ ...f, newPassword: e.target.value }))}
+                  autoComplete="new-password"
+                  minLength={6}
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowNewPassword((prev) => !prev)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-paper transition-colors focus:outline-none"
+                  title={showNewPassword ? 'Hide password' : 'Show password'}
+                  tabIndex={-1}
+                >
+                  {showNewPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
+              </div>
             </div>
             <div>
               <label className="field-label" htmlFor="confirmNew">Confirm new password</label>
-              <input
-                id="confirmNew"
-                type="password"
-                className="field-input"
-                value={passwordForm.confirmNew}
-                onChange={(e) => setPasswordForm((f) => ({ ...f, confirmNew: e.target.value }))}
-                autoComplete="new-password"
-                minLength={6}
-                required
-              />
+              <div className="relative">
+                <input
+                  id="confirmNew"
+                  type={showConfirmNew ? 'text' : 'password'}
+                  className="field-input pr-10"
+                  value={passwordForm.confirmNew}
+                  onChange={(e) => setPasswordForm((f) => ({ ...f, confirmNew: e.target.value }))}
+                  autoComplete="new-password"
+                  minLength={6}
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmNew((prev) => !prev)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted hover:text-paper transition-colors focus:outline-none"
+                  title={showConfirmNew ? 'Hide password' : 'Show password'}
+                  tabIndex={-1}
+                >
+                  {showConfirmNew ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
+              </div>
             </div>
           </div>
           <div className="flex justify-end gap-3 pt-2">

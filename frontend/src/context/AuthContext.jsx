@@ -76,12 +76,20 @@ export function AuthProvider({ children }) {
 
   const signup = useCallback(async ({ name, email, password }) => {
     try {
-      await signupRequest({ name, email, password })
-      return { ok: true }
+      const res = await signupRequest({ name, email, password })
+      const { token: newToken, user: newUser } = res.data
+      if (newToken && newUser) {
+        persistSession(newToken, newUser)
+      }
+      return {
+        ok: true,
+        user: newUser,
+        recoveryKey: res.data.recoveryKey || newUser?.recoveryKey,
+      }
     } catch (error) {
       return { ok: false, message: getErrorMessage(error, 'Could not create your account.') }
     }
-  }, [])
+  }, [persistSession])
 
   const refreshUser = useCallback(async () => {
     const res = await fetchMe()

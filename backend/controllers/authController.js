@@ -1,4 +1,4 @@
-import { loginUser, signupUser } from "../services/authServices.js"
+import { loginUser, signupUser, resetPasswordWithRecoveryKey } from "../services/authServices.js"
 
 export const signup = async(req,res)=>{
     try {
@@ -31,6 +31,19 @@ export const login = async(req,res)=>{
         res.status(401).json({
             success:false,
             message:error.message
+        })
+    }
+}
+
+export const resetPassword = async(req, res) => {
+    try {
+        const { email, recoveryKey, newPassword } = req.body
+        const result = await resetPasswordWithRecoveryKey({ email, recoveryKey, newPassword })
+        res.status(200).json(result)
+    } catch (error) {
+        res.status(400).json({
+            success: false,
+            message: error.message || 'Failed to reset password.',
         })
     }
 }

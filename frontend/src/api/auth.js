@@ -5,3 +5,6 @@ export const signupRequest = (payload) => api.post('/auth/signup', payload)
 
 // POST /api/auth/login — { email, password } -> { success, message, token, user }
 export const loginRequest = (payload) => api.post('/auth/login', payload)
+
+// POST /api/auth/reset-password — { email, recoveryKey, newPassword }
+export const resetPasswordRequest = (payload) => api.post('/auth/reset-password', payload)
