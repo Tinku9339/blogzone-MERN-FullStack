@@ -8,6 +8,7 @@ import {
   fetchBlogsByCategory,
   fetchPublishedBlogs,
   fetchMyBlogs,
+  toggleLike,
 } from '../controllers/blogController.js'
 import { authenticate } from '../middlewares/authMiddleware.js'
 import { generateDescription } from '../controllers/blogController.js';
@@ -20,8 +21,11 @@ router.get('/Blogs', fetchAllBlogs)
 router.get('/published', fetchPublishedBlogs)
 router.get('/category/:category', fetchBlogsByCategory)
 router.get('/Blog/:id', fetchBlogById)
+router.get('/:id', fetchBlogById)
 router.post('/createBlog', authenticate, createBlog)
 router.put('/edit/:id', authenticate, editBlog)
 router.delete('/del/:id', authenticate, removeBlog)
+router.post('/:id/like', authenticate, toggleLike)
+router.post('/like/:id', authenticate, toggleLike)
 
 export default router

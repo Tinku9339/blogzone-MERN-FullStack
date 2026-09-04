@@ -25,3 +25,6 @@ export const deleteBlog = (id) => api.delete(`/blogs/del/${id}`)
 
 // POST /api/blogs/generate-description — { title, category } -> { data: { description } }
 export const generateDescription = (payload) => api.post('/blogs/generate-description', payload)
+
+// POST /api/blogs/:id/like — toggle like for current user
+export const likeBlog = (id) => api.post(`/blogs/${id}/like`)

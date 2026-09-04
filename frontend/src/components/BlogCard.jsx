@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import { ArrowUpRight } from "lucide-react";
-import { formatDate, readingTime } from "../utils/constants.js";
+import { ArrowUpRight, Heart } from "lucide-react";
+import { formatDate, readingTime, initials } from "../utils/constants.js";
 import CategoryTag from "./CategoryTag.jsx";
 
 export default function BlogCard({ blog, featured = false }) {
@@ -26,11 +26,16 @@ export default function BlogCard({ blog, featured = false }) {
       <div
         className={`flex flex-1 flex-col gap-3 p-5 ${featured ? "sm:w-1/2 sm:p-8" : ""}`}
       >
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2.5">
           <CategoryTag>{blog.category}</CategoryTag>
           <span className="font-mono text-[11px] text-ink/50">
             {formatDate(blog.createdAt)}
           </span>
+          {blog.author?.name && (
+            <span className="flex items-center gap-1.5 font-mono text-[11px] text-ink/60">
+              · by {blog.author.name}
+            </span>
+          )}
         </div>
         <h3
           className={`blog-card-title font-display font-semibold leading-snug text-ink ${
@@ -49,9 +54,17 @@ export default function BlogCard({ blog, featured = false }) {
             .trim()}
         </p>
         <div className="mt-auto flex items-center justify-between pt-2">
-          <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink/50">
-            {readingTime(blog.description)}
-          </span>
+          <div className="flex items-center gap-3">
+            <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-ink/50">
+              {readingTime(blog.description)}
+            </span>
+            {Boolean(blog.likesCount) && (
+              <span className="flex items-center gap-1 font-mono text-[11px] text-rust">
+                <Heart className="h-3 w-3 fill-rust" />
+                {blog.likesCount}
+              </span>
+            )}
+          </div>
           <span className="inline-flex items-center gap-1 text-sm font-medium text-ink/80 transition-colors group-hover:text-rust">
             Read
             <ArrowUpRight className="h-3.5 w-3.5" />

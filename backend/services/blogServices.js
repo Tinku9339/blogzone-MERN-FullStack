@@ -7,6 +7,7 @@ import {
   findPublishedBlogs,
   findBlogsByAuthor,
   deleteBlogByIdForAuthor,
+  toggleLikeBlog,
 } from "../repositories/blogRepositories.js";
 
 export const createBlogEntry = async (blogData, userId) => {
@@ -81,4 +82,16 @@ export const getBlogsByCategory = async (category) => {
 
 export const getPublishedBlogs = async () => {
   return await findPublishedBlogs();
+};
+
+export const likeBlogService = async (blogId, userId) => {
+  const updatedBlog = await toggleLikeBlog(blogId, userId);
+  if (!updatedBlog) {
+    throw new Error("Blog not found");
+  }
+  return {
+    likesCount: updatedBlog.likesCount,
+    likes: updatedBlog.likes,
+    isLiked: updatedBlog.likes.some((id) => id.toString() === userId.toString()),
+  };
 };

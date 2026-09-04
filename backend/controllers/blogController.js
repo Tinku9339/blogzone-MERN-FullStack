@@ -7,6 +7,7 @@ import {
   deleteBlog,
   getBlogsByCategory,
   getPublishedBlogs,
+  likeBlogService,
 } from '../services/blogServices.js'
 import { generateBlogDescriptionService } from '../services/aiServices.js';
 
@@ -90,6 +91,15 @@ export const generateDescription = async (req, res) => {
       success: true, 
       data: { description: generatedDescription } 
     });
+  } catch (error) {
+    res.status(400).json({ success: false, message: error.message });
+  }
+};
+
+export const toggleLike = async (req, res) => {
+  try {
+    const result = await likeBlogService(req.params.id, req.id);
+    res.status(200).json({ success: true, data: result });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }
