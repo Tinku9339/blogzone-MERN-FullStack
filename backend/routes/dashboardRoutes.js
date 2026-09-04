@@ -1,4 +1,5 @@
 import express from 'express';
+import mongoose from 'mongoose';
 import { authenticate } from '../middlewares/authMiddleware.js';
 import Blog from '../models/Blog.js';
 import Comment from '../models/Comment.js';
@@ -7,7 +8,21 @@ const router = express.Router();
 
 // GET /api/dashboard/health — public health check
 router.get('/health', (req, res) => {
-  res.json({ success: true, message: 'BlogZone API is running', timestamp: new Date().toISOString() });
+  const dbState = mongoose.connection.readyState;
+  const dbStatusMap = {
+    0: 'disconnected',
+    1: 'connected',
+    2: 'connecting',
+    3: 'disconnecting',
+  };
+
+  res.json({
+    success: true,
+    message: 'BlogZone API is running',
+    database: dbStatusMap[dbState] || 'unknown',
+    uptime: Math.floor(process.uptime()),
+    timestamp: new Date().toISOString(),
+  });
 });
 
 
