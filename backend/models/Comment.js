@@ -17,6 +17,11 @@ const commentSchema = new mongoose.Schema(
       trim: true,
       default: '',
     },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      default: null,
+    },
     content: {
       type: String,
       required: true,
@@ -24,7 +29,21 @@ const commentSchema = new mongoose.Schema(
     },
     isApproved: {
       type: Boolean,
+      default: true, // auto-approved for instant real-time publishing
+    },
+    isDeleted: {
+      type: Boolean,
       default: false,
+      index: true,
+    },
+    deletedAt: {
+      type: Date,
+      default: null,
+    },
+    deletedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      default: null,
     },
   },
   { timestamps: true }

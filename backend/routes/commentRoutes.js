@@ -6,12 +6,12 @@ import {
   approveCommentById,
   deleteCommentById,
 } from '../controllers/commentController.js';
-import { authenticate } from '../middlewares/authMiddleware.js';
+import { authenticate, optionalAuthenticate } from '../middlewares/authMiddleware.js';
 
 const router = express.Router();
 
-// Public routes
-router.post('/:blogId', postComment);
+// Public routes (authenticated users have user id automatically bound)
+router.post('/:blogId', optionalAuthenticate, postComment);
 router.get('/:blogId', getCommentsForBlog);
 
 // Admin-only routes

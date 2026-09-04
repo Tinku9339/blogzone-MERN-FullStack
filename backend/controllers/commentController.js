@@ -6,13 +6,14 @@ import {
   deleteComment,
 } from '../services/commentServices.js';
 
-// POST /api/comments/:blogId  — public, submit a comment
+// POST /api/comments/:blogId  — public/auth, submit a comment
 export const postComment = async (req, res) => {
   try {
     const { blogId } = req.params;
     const { name, email, content } = req.body;
-    const comment = await submitComment({ blogId, name, email, content });
-    res.status(201).json({ success: true, data: comment, message: 'Comment submitted for review' });
+    const userId = req.id || req.body.userId || null;
+    const comment = await submitComment({ blogId, name, email, content, userId });
+    res.status(201).json({ success: true, data: comment, message: 'Comment posted successfully' });
   } catch (error) {
     res.status(400).json({ success: false, message: error.message });
   }
