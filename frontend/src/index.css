@@ -126,24 +126,61 @@ html.light {
   }
 }
 
+/* ── Quill Editor Theme & Typography Overrides ───────────────────────── */
 .ql-toolbar.ql-snow,
 .ql-container.ql-snow {
-  border-color: rgb(var(--paper-line) / 0.3);
+  border-color: rgb(var(--paper-line) / 0.25);
 }
 
 .ql-toolbar.ql-snow {
   background: rgb(var(--canvas-raised));
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  padding: 8px 12px;
 }
 
 .ql-container.ql-snow {
   background: rgb(var(--canvas-panel));
   color: rgb(var(--paper));
   font-family: inherit;
-  font-size: 0.875rem;
+  font-size: 0.95rem;
+  border: none;
+}
+
+.ql-editor {
+  min-height: 280px;
+  line-height: 1.8;
+  color: rgb(var(--paper));
+}
+
+.inline-quill .ql-editor {
+  min-height: 280px;
+}
+
+.fullscreen-quill {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.fullscreen-quill .ql-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.fullscreen-quill .ql-editor {
+  flex: 1;
+  min-height: calc(100vh - 220px);
+  font-size: 1.05rem;
+  line-height: 1.85;
+  padding: 1.5rem 2rem;
 }
 
 .ql-editor.ql-blank::before {
   color: rgb(var(--muted) / 0.75);
+  font-style: normal;
 }
 
 .ql-snow .ql-stroke {
@@ -161,6 +198,10 @@ html.light {
 .ql-snow .ql-picker-options {
   background: rgb(var(--canvas-raised));
   border-color: rgb(var(--paper-line) / 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  padding: 6px;
+  border-radius: 4px;
+  z-index: 40;
 }
 
 .ql-snow .ql-picker-label:hover,
@@ -169,6 +210,329 @@ html.light {
 .ql-snow button.ql-active .ql-stroke {
   color: #c99a4a;
   stroke: #c99a4a;
+}
+
+.ql-snow button:hover .ql-fill,
+.ql-snow button.ql-active .ql-fill {
+  fill: #c99a4a;
+}
+
+/* ── Quill Font Dropdown Typography & Live Previews ──────────────────── */
+.ql-snow .ql-picker.ql-font {
+  width: 165px;
+}
+
+.ql-snow .ql-picker.ql-font .ql-picker-label:not([data-value])::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item:not([data-value])::before,
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value="inter"]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="inter"]::before {
+  content: 'Inter (Sans)';
+  font-family: 'Inter', sans-serif;
+}
+
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value="fraunces"]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="fraunces"]::before {
+  content: 'Fraunces (Editorial)';
+  font-family: 'Fraunces', Georgia, serif;
+}
+
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value="playfair"]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="playfair"]::before {
+  content: 'Playfair Display';
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value="lora"]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="lora"]::before {
+  content: 'Lora (Literary)';
+  font-family: 'Lora', Georgia, serif;
+}
+
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value="merriweather"]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="merriweather"]::before {
+  content: 'Merriweather';
+  font-family: 'Merriweather', serif;
+}
+
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value="jetbrains"]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="jetbrains"]::before {
+  content: 'JetBrains Mono';
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value="caveat"]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="caveat"]::before {
+  content: 'Caveat (Script)';
+  font-family: 'Caveat', cursive;
+  font-size: 1.15em;
+}
+
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value="serif"]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="serif"]::before {
+  content: 'Georgia (Serif)';
+  font-family: Georgia, serif;
+}
+
+.ql-snow .ql-picker.ql-font .ql-picker-label[data-value="monospace"]::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item[data-value="monospace"]::before {
+  content: 'Monospace';
+  font-family: monospace;
+}
+
+/* ── Quill Font Sizes ────────────────────────────────────────────────── */
+.ql-snow .ql-picker.ql-size {
+  width: 110px;
+}
+
+.ql-snow .ql-picker.ql-size .ql-picker-label:not([data-value])::before,
+.ql-snow .ql-picker.ql-size .ql-picker-item:not([data-value])::before {
+  content: 'Normal (15px)';
+}
+
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="small"]::before,
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="small"]::before {
+  content: 'Small (12px)';
+  font-size: 12px;
+}
+
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="large"]::before,
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="large"]::before {
+  content: 'Large (18px)';
+  font-size: 18px;
+}
+
+.ql-snow .ql-picker.ql-size .ql-picker-label[data-value="huge"]::before,
+.ql-snow .ql-picker.ql-size .ql-picker-item[data-value="huge"]::before {
+  content: 'Huge (24px)';
+  font-size: 22px;
+  font-weight: 600;
+}
+
+/* ── Quill Heading Picker ────────────────────────────────────────────── */
+.ql-snow .ql-picker.ql-header {
+  width: 115px;
+}
+
+.ql-snow .ql-picker.ql-header .ql-picker-label:not([data-value])::before,
+.ql-snow .ql-picker.ql-header .ql-picker-item:not([data-value])::before {
+  content: 'Paragraph';
+}
+
+.ql-snow .ql-picker.ql-header .ql-picker-label[data-value="1"]::before,
+.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="1"]::before {
+  content: 'Heading 1';
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.ql-snow .ql-picker.ql-header .ql-picker-label[data-value="2"]::before,
+.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="2"]::before {
+  content: 'Heading 2';
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.ql-snow .ql-picker.ql-header .ql-picker-label[data-value="3"]::before,
+.ql-snow .ql-picker.ql-header .ql-picker-item[data-value="3"]::before {
+  content: 'Heading 3';
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* ── Typography Font Classes (applied in Editor & Reader) ────────────── */
+.ql-font-inter,
+.prose-blog .ql-font-inter {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.ql-font-fraunces,
+.prose-blog .ql-font-fraunces {
+  font-family: 'Fraunces', Georgia, serif;
+}
+
+.ql-font-playfair,
+.prose-blog .ql-font-playfair {
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+.ql-font-lora,
+.prose-blog .ql-font-lora {
+  font-family: 'Lora', Georgia, serif;
+}
+
+.ql-font-merriweather,
+.prose-blog .ql-font-merriweather {
+  font-family: 'Merriweather', serif;
+}
+
+.ql-font-jetbrains,
+.prose-blog .ql-font-jetbrains {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.ql-font-caveat,
+.prose-blog .ql-font-caveat {
+  font-family: 'Caveat', cursive;
+  font-size: 1.15em;
+}
+
+.ql-font-serif,
+.prose-blog .ql-font-serif {
+  font-family: Georgia, 'Times New Roman', serif;
+}
+
+.ql-font-monospace,
+.prose-blog .ql-font-monospace {
+  font-family: 'Courier New', monospace;
+}
+
+/* ── Text Alignment & Size Utility Classes ───────────────────────────── */
+.ql-align-center,
+.prose-blog .ql-align-center {
+  text-align: center;
+}
+
+.ql-align-right,
+.prose-blog .ql-align-right {
+  text-align: right;
+}
+
+.ql-align-justify,
+.prose-blog .ql-align-justify {
+  text-align: justify;
+}
+
+.ql-size-small,
+.prose-blog .ql-size-small {
+  font-size: 0.75rem;
+}
+
+.ql-size-large,
+.prose-blog .ql-size-large {
+  font-size: 1.25rem;
+}
+
+.ql-size-huge,
+.prose-blog .ql-size-huge {
+  font-size: 1.75rem;
+  font-weight: 700;
+}
+
+/* ── Reader Post Typography & Layout (prose-blog) ────────────────────── */
+.prose-blog {
+  color: rgb(var(--paper));
+}
+
+.prose-blog h1 {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 2.25rem;
+  font-weight: 700;
+  line-height: 1.25;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  color: rgb(var(--paper));
+}
+
+.prose-blog h2 {
+  font-family: 'Fraunces', Georgia, serif;
+  font-size: 1.75rem;
+  font-weight: 600;
+  line-height: 1.3;
+  margin-top: 1.75rem;
+  margin-bottom: 0.75rem;
+  color: rgb(var(--paper));
+}
+
+.prose-blog h3 {
+  font-size: 1.35rem;
+  font-weight: 600;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: rgb(var(--paper));
+}
+
+.prose-blog p {
+  margin-bottom: 1.25rem;
+  line-height: 1.85;
+}
+
+.prose-blog blockquote {
+  border-left: 3px solid #c99a4a;
+  background: rgb(var(--canvas-panel) / 0.6);
+  padding: 0.75rem 1.25rem;
+  margin: 1.5rem 0;
+  font-style: italic;
+  color: rgb(var(--paper-dim));
+  border-radius: 0 4px 4px 0;
+}
+
+.prose-blog pre {
+  background: rgb(var(--canvas-panel));
+  border: 1px solid rgb(var(--paper-line) / 0.25);
+  border-radius: 4px;
+  padding: 1rem 1.25rem;
+  margin: 1.25rem 0;
+  overflow-x: auto;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.875rem;
+}
+
+.prose-blog code {
+  background: rgb(var(--canvas-panel));
+  border: 1px solid rgb(var(--paper-line) / 0.2);
+  padding: 0.15rem 0.4rem;
+  border-radius: 3px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85em;
+  color: #c99a4a;
+}
+
+.prose-blog pre code {
+  background: transparent;
+  border: none;
+  padding: 0;
+  color: inherit;
+}
+
+.prose-blog ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.prose-blog ol {
+  list-style-type: decimal;
+  padding-left: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.prose-blog li {
+  margin-bottom: 0.35rem;
+  line-height: 1.75;
+}
+
+.prose-blog img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin: 1.75rem 0;
+  border: 1px solid rgb(var(--paper-line) / 0.2);
+}
+
+.prose-blog a {
+  color: #c99a4a;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.15s ease;
+}
+
+.prose-blog a:hover {
+  color: #e5b364;
+}
+
+.prose-blog hr {
+  border-color: rgb(var(--paper-line) / 0.2);
+  margin: 2.25rem 0;
 }
 
 html.light .blog-card-title {

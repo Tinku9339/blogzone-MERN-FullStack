@@ -272,7 +272,10 @@ export default function BlogDetail() {
         <div
           className="prose-blog mt-8 text-[17px] leading-[1.8] text-paper/90"
           dangerouslySetInnerHTML={{
-            __html: DOMPurify.sanitize(blog.description),
+            __html: DOMPurify.sanitize(blog.description, {
+              ADD_ATTR: ['style', 'class', 'target', 'data-value'],
+              ADD_TAGS: ['u', 's', 'strike', 'sub', 'sup', 'code', 'pre', 'blockquote', 'hr', 'img'],
+            }),
           }}
         />
 
