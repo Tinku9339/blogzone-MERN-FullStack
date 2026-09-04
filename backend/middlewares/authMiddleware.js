@@ -22,3 +22,18 @@ export const authenticate = (req, res, next) => {
     });
   }
 };
+
+export const optionalAuthenticate = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  const token = authHeader && authHeader.split(" ")[1];
+
+  if (token) {
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      req.id = decoded.userId;
+    } catch {
+      // ignore token verification error in optional authentication
+    }
+  }
+  next();
+};

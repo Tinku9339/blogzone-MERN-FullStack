@@ -1,4 +1,24 @@
-import { getUserProfile , updateUserProfile , changeUserPassword } from "../services/profileServices.js";
+import {
+    getUserProfile,
+    updateUserProfile,
+    changeUserPassword,
+    getPublicAuthorProfile,
+} from "../services/profileServices.js";
+
+export const getAuthorProfile = async (req, res) => {
+    try {
+        const data = await getPublicAuthorProfile(req.params.id);
+        res.status(200).json({
+            success: true,
+            data,
+        });
+    } catch (error) {
+        res.status(404).json({
+            success: false,
+            message: error.message,
+        });
+    }
+};
 
 export const getMe = async(req,res)=>{
     try {

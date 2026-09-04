@@ -1,4 +1,5 @@
 import { findUserById, findUserByIdAndUpdate, findUserByIdWithPassword } from "../repositories/userRepositories.js"
+import { findPublishedBlogsByAuthor } from "../repositories/blogRepositories.js"
 import bcrypt from 'bcrypt'
 
 export const getUserProfile = async(userId)=>{
@@ -9,6 +10,18 @@ export const getUserProfile = async(userId)=>{
     }
     return user
 }
+
+export const getPublicAuthorProfile = async (authorId) => {
+    const author = await findUserById(authorId);
+    if (!author) {
+        throw new Error("Author not found");
+    }
+    const blogs = await findPublishedBlogsByAuthor(authorId);
+    return {
+        author,
+        blogs,
+    };
+};
 
 export const updateUserProfile = async(userId,updates)=> {
     const allowedUpdates = {}

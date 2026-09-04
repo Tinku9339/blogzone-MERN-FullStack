@@ -8,3 +8,6 @@ export const updateProfile = (payload) => api.put('/profile/update', payload)
 
 // PUT /api/profile/change-password — auth, { oldPassword, newPassword }
 export const changePassword = (payload) => api.put('/profile/change-password', payload)
+
+// GET /api/profile/author/:id — public author profile + published blogs
+export const fetchAuthorProfile = (authorId) => api.get(`/profile/author/${authorId}`)
