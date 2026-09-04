@@ -1,55 +1,41 @@
 import { GoogleGenAI } from '@google/genai';
 
-// Clean code blocks or markdown wrappers from AI output
+// Clean code blocks, quotes, or markdown wrappers from AI output
 const cleanAiOutput = (rawText) => {
   if (!rawText) return '';
   let cleaned = rawText.trim();
-  // Strip leading ```html or ``` and trailing ```
-  cleaned = cleaned.replace(/^```(?:html)?\s*/i, '');
+  // Strip code fences if present
+  cleaned = cleaned.replace(/^```(?:markdown|text)?\s*/i, '');
   cleaned = cleaned.replace(/\s*```$/i, '');
+  // Remove enclosing quotes if model returns them
+  if (cleaned.startsWith('"') && cleaned.endsWith('"')) {
+    cleaned = cleaned.slice(1, -1).trim();
+  }
   return cleaned.trim();
 };
 
-// Intelligent structured editorial generator for zero-limit, free, instant drafting
+// Intelligent contextual generator for zero-limit, free, instant drafting matching the prompt's 150-200 word format
 const generateContextualDescription = (title, category) => {
   const cat = (category || 'General').trim();
   const cleanTitle = title.trim().replace(/[.!?]+$/, '');
 
-  const hooks = [
-    `In an era where the landscape of ${cat} is rapidly evolving, "${cleanTitle}" represents a pivotal turning point for thinkers and creators alike. Understanding how to navigate these changes requires both strategic foresight and grounded execution.`,
-    `Every transformative movement in ${cat} begins with a fundamental question. In exploring "${cleanTitle}", we uncover the critical principles and deeper patterns that separate temporary noise from lasting impact.`,
-    `The intersection of creativity and disciplined methodology is where breakthroughs happen. "${cleanTitle}" challenges conventional wisdom in ${cat} and invites us to reconsider how we approach modern problems.`,
-    `Navigating the complexities of ${cat} demands more than surface-level knowledge. In this comprehensive look at "${cleanTitle}", we break down the actionable insights necessary to build sustainable momentum.`,
-  ];
+  const intros = {
+    Technology: `In today's fast-moving digital landscape, understanding the dynamics of "${cleanTitle}" has become essential for anyone looking to stay ahead of technological curves.`,
+    Lifestyle: `Finding balance and meaningful direction often begins with small, deliberate shifts, and exploring "${cleanTitle}" opens up fresh possibilities for everyday life.`,
+    Education: `Navigating complex concepts requires a clear, step-by-step approach, making a deep understanding of "${cleanTitle}" a valuable asset for eager learners and educators alike.`,
+    Business: `In an increasingly competitive market, strategic execution around "${cleanTitle}" serves as a powerful catalyst for sustainable organizational growth.`,
+    Health: `Prioritizing long-term wellness starts with informed decision-making, and taking a thoughtful look at "${cleanTitle}" offers grounded perspectives for healthy living.`,
+    Travel: `Embarking on a journey into "${cleanTitle}" reveals memorable sights, rich cultural textures, and unexpected discoveries waiting around every corner.`,
+    General: `Delving into "${cleanTitle}" reveals a compelling intersection of foundational ideas and modern perspectives that resonate across ${cat}.`,
+  };
 
-  const quotes = [
-    `"True mastery in any discipline is not measured by the complexity we introduce, but by the clarity and purpose we leave behind."`,
-    `"The future does not belong to those who merely react to change, but to those who deliberately architect it."`,
-    `"Simplicity is not the absence of nuance; it is the ultimate expression of intentionality and focus."`,
-  ];
+  const intro = intros[cat] || intros.General;
 
-  const hash = cleanTitle.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-  const selectedHook = hooks[hash % hooks.length];
-  const selectedQuote = quotes[hash % quotes.length];
+  const body = `This comprehensive guide explores the core principles behind the topic, breaking down why it matters right now and how it directly influences modern practices. Whether you are encountering these ideas for the first time or looking to sharpen your current perspective, the discussion uncovers practical insights, real-world context, and key considerations to help you make informed choices. Readers will discover how to identify underlying patterns, navigate common roadblocks, and apply actionable lessons with confidence.`;
 
-  return `<p class="ql-size-large ql-font-fraunces">${selectedHook}</p>
+  const conclusion = `By connecting theory with practical experience, this article equips you with the clarity and inspiration needed to turn thoughtful ideas into meaningful results. Take your time to reflect on these principles, explore the nuances within ${cat}, and take your understanding to the next level.`;
 
-<blockquote class="ql-font-playfair">${selectedQuote}</blockquote>
-
-<h2>1. The Foundation & Core Dynamics</h2>
-<p>When examining "${cleanTitle}", the primary challenge often lies in distinguishing foundational principles from ephemeral trends. By focusing on root causes rather than symptoms, practitioners in ${cat} can design systems that remain resilient amidst constant shifts.</p>
-<p>Deliberate craftsmanship requires patience and iteration. When we treat our work as an evolving dialogue between theory and practice, unexpected synergies begin to emerge.</p>
-
-<h2>2. Key Takeaways & Actionable Principles</h2>
-<ul>
-  <li><strong>Intentional Architecture:</strong> Establish clear boundaries and decoupled structures that accommodate future iterations seamlessly.</li>
-  <li><strong>Continuous Calibration:</strong> Regularly test assumptions against empirical evidence and real-world feedback loops.</li>
-  <li><strong>Sustainable Momentum:</strong> Prioritize deliberate, consistent progress over sporadic bursts of unstructured effort.</li>
-  <li><strong>Clarity of Purpose:</strong> Ensure every decision serves a direct, well-defined objective for your readers and users.</li>
-</ul>
-
-<h2>3. Looking Forward: The Path Ahead</h2>
-<p>As you apply these insights to "${cleanTitle}", remember that meaningful growth is cumulative. Embrace the process of refinement, question default assumptions, and stay relentlessly curious about the nuances of ${cat}.</p>`;
+  return `${intro} ${body} ${conclusion}`;
 };
 
 export const generateBlogDescriptionService = async (title, category) => {
@@ -58,27 +44,41 @@ export const generateBlogDescriptionService = async (title, category) => {
   }
 
   const apiKey = process.env.GEMINI_API_KEY;
+  const safeCategory = (category || 'General').trim();
 
   // If a real Gemini API key is configured, use Google GenAI
   if (apiKey && apiKey !== 'your_gemini_api_key_here' && apiKey.trim().length > 10) {
     try {
       const ai = new GoogleGenAI({ apiKey: apiKey.trim() });
       const modelName = process.env.GEMINI_MODEL || "gemini-1.5-flash";
-      const prompt = `Act as an expert editorial writer. Write a high-quality, comprehensive, and well-structured blog article for:
-Title: "${title}"
-Category: "${category || 'General'}"
+      const prompt = `Act as a professional content writer and SEO-aware blog strategist.
 
-Structure requirements:
-1. Opening Hook: An engaging lead paragraph introducing the topic with depth and authority.
-2. Key Quote: A memorable, inspiring pull-quote inside a <blockquote>.
-3. Main Sections: 2 to 3 detailed sections with <h2> headings and rich, descriptive paragraphs.
-4. Key Takeaways: An actionable bulleted list with 3-4 key principles (each with <strong>Concept:</strong> explanation).
-5. Conclusion: A forward-looking final section with an <h2> heading and an inspiring closing paragraph.
+Generate a compelling and informative blog description for the following:
 
-Formatting Rules:
-- Return ONLY the clean markup elements ready to render visually in the editor.
-- Do NOT wrap in \`\`\`html or \`\`\` code blocks.
-- Do NOT include conversational filler like "Here is your article:". Start directly with the opening paragraph.`;
+Title: ${title}
+Category: ${safeCategory}
+
+Instructions:
+- Understand the intent of the title before writing.
+- Make the description highly relevant to both the title and category.
+- Start with a strong hook that captures the reader's attention.
+- Clearly explain the main topic, its importance, and what the reader will gain from the blog.
+- Use natural, conversational, professional language.
+- Keep the writing original, engaging, and easy to understand.
+- Adapt the tone to the category. For example:
+  Technology → informative and modern
+  Lifestyle → conversational and engaging
+  Education → clear and explanatory
+  Business → professional and practical
+  Health → informative and responsible
+  Travel → descriptive and engaging
+- Avoid unnecessary repetition and keyword stuffing.
+- Do not create fake statistics, citations, expert quotes, research findings, or specific claims.
+- Do not use markdown, headings, bullet points, emojis, or hashtags.
+- Do not mention AI or the generation process.
+- Length: 150–200 words.
+
+Return ONLY the blog description, with no introduction or additional commentary.`;
 
       const response = await ai.models.generateContent({
         model: modelName,
@@ -96,6 +96,6 @@ Formatting Rules:
     }
   }
 
-  // Instant, free, zero-limit structured editorial fallback
+  // Instant, free, zero-limit structured fallback matching the same 150-200 word guidelines
   return generateContextualDescription(title, category);
 };
