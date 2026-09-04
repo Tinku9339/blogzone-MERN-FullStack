@@ -12,13 +12,13 @@ import CategoryTag from '../components/CategoryTag.jsx'
 function StatCard({ icon: Icon, label, value, tone = 'brass' }) {
   const toneClass = tone === 'sage' ? 'text-sage' : tone === 'rust' ? 'text-rust' : 'text-brass'
   return (
-    <div className="card-paper flex items-center gap-4 p-5">
-      <div className={`flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-ink/5 ${toneClass}`}>
+    <div className="rounded-sm border border-paper-line/15 bg-canvas-panel flex items-center gap-4 p-5 transition-colors shadow-sm">
+      <div className={`flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full bg-paper-line/15 ${toneClass}`}>
         <Icon className="h-5 w-5" />
       </div>
       <div>
-        <p className="font-display text-2xl font-semibold text-ink">{value}</p>
-        <p className="font-mono text-[11px] uppercase tracking-[0.1em] text-ink/60">{label}</p>
+        <p className="font-display text-2xl font-semibold text-paper">{value}</p>
+        <p className="font-mono text-[11px] uppercase tracking-[0.1em] text-muted">{label}</p>
       </div>
     </div>
   )

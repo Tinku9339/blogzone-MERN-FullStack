@@ -179,6 +179,12 @@ html.light .blog-card-description {
   color: #b3ada5;
 }
 
+html.light .card-paper {
+  background-color: rgb(var(--canvas-panel));
+  color: rgb(var(--paper));
+  border: 1px solid rgb(var(--paper-line) / 0.25);
+}
+
 html,
 body {
   scrollbar-width: none;
